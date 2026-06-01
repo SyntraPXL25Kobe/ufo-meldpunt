@@ -8,6 +8,7 @@ use App\Notifications\NewReportAdmin;
 use App\Notifications\NewReportUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 
 class ReportController extends Controller
@@ -27,6 +28,7 @@ class ReportController extends Controller
             'description'  => ['required', 'string', 'min:20'],
             'category'     => ['required', 'in:' . implode(',', array_keys(Report::$categories))],
             'photo'        => ['nullable', 'image', 'max:5120'],
+            'guest_email'  => ['nullable', 'email', 'max:255'],
         ], [
             'observed_at.required'       => 'Datum en tijd zijn verplicht.',
             'observed_at.before_or_equal' => 'De waarnemingsdatum mag niet in de toekomst liggen.',
@@ -36,6 +38,7 @@ class ReportController extends Controller
             'category.required'          => 'Selecteer een categorie.',
             'photo.image'                => 'Het bestand moet een afbeelding zijn.',
             'photo.max'                  => 'De afbeelding mag maximaal 5 MB zijn.',
+            'guest_email.email'          => 'Vul een geldig e-mailadres in.',
         ]);
 
         $photoPath = null;
@@ -45,6 +48,7 @@ class ReportController extends Controller
 
         $report = Report::create([
             'user_id'     => auth()->id(),
+            'guest_email' => auth()->check() ? null : ($validated['guest_email'] ?? null),
             'observed_at' => $validated['observed_at'],
             'location'    => $validated['location'],
             'description' => $validated['description'],
@@ -56,6 +60,9 @@ class ReportController extends Controller
         // Notify the reporter (if logged in)
         if ($report->user) {
             $report->user->notify(new NewReportUser($report));
+        } elseif ($report->guest_email) {
+            Notification::route('mail', $report->guest_email)
+                ->notify(new NewReportUser($report));
         }
 
         // Notify all admins
