@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Filament\Resources\ReportResource\Pages;
+
+use App\Filament\Resources\ReportResource;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateReport extends CreateRecord
+{
+    protected static string $resource = ReportResource::class;
+
+    public function getTitle(): string
+    {
+        return 'Melding aanmaken';
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+}
