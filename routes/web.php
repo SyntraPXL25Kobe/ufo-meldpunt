@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn() => view('home'))->name('home');
 Route::get('/over-ons', fn() => view('over-ons'))->name('over-ons');
 
-// Submit a report (guest & logged in)
+// Submit a report — toegankelijk voor iedereen (gast & ingelogd)
 Route::get('/report', [ReportController::class, 'create'])->name('reports.create');
 Route::post('/report', [ReportController::class, 'store'])->name('reports.store');
 Route::get('/report/thank-you', [ReportController::class, 'thankYou'])->name('reports.thank-you');
 
-// My reports (logged in only)
-Route::get('/my-reports', [MyReportsController::class, 'index'])->name('my-reports.index')->middleware('auth');
+// Mijn meldingen — alleen voor ingelogde melders
+Route::middleware(['auth', 'role:melder'])->group(function () {
+    Route::get('/my-reports', [MyReportsController::class, 'index'])->name('my-reports.index');
+});
 
 // Auth
 Route::middleware('guest')->group(function () {
