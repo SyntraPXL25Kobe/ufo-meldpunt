@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -37,6 +38,8 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'role'     => 'reporter',
         ]);
+
+        $user->assignRole(Role::firstOrCreate(['name' => 'melder']));
 
         Auth::login($user);
 
