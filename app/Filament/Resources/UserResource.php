@@ -8,6 +8,7 @@ use Filament\Forms;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Actions;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
@@ -106,12 +107,12 @@ class UserResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->label('Bewerken'),
-                Tables\Actions\DeleteAction::make()->label('Verwijderen'),
+                Actions\EditAction::make()->label('Bewerken'),
+                Actions\DeleteAction::make()->label('Verwijderen'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()->label('Verwijder geselecteerde'),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make()->label('Verwijder geselecteerde'),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
