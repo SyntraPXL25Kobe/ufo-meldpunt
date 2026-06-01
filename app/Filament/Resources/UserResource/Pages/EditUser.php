@@ -22,6 +22,12 @@ class EditUser extends EditRecord
         ];
     }
 
+    protected function afterSave(): void
+    {
+        $spatieRole = $this->record->role === 'admin' ? 'admin' : 'melder';
+        $this->record->syncRoles([$spatieRole]);
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
