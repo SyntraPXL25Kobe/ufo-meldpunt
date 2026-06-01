@@ -98,8 +98,19 @@
         </div>
 
         @guest
-        <div class="bg-indigo-900/30 border border-indigo-800 rounded-lg p-4 text-sm text-indigo-300">
-            💡 <strong>Tip:</strong> <a href="{{ route('register') }}" class="underline hover:text-indigo-200">Registreer</a> of <a href="{{ route('login') }}" class="underline hover:text-indigo-200">log in</a> om uw meldingen te volgen en statusupdates per e-mail te ontvangen.
+        {{-- E-mailadres voor gastmelders --}}
+        <div>
+            <label for="guest_email" class="block text-sm font-semibold text-gray-200 mb-2">
+                E-mailadres <span class="text-gray-500">(optioneel — voor bevestiging)</span>
+            </label>
+            <input type="email" name="guest_email" id="guest_email"
+                   value="{{ old('guest_email') }}"
+                   placeholder="uw@email.nl"
+                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 @error('guest_email') border-red-500 @enderror">
+            @error('guest_email')
+                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+            @enderror
+            <p class="text-gray-500 text-xs mt-1">Vul uw e-mailadres in om een bevestiging te ontvangen. Of <a href="{{ route('register') }}" class="underline hover:text-indigo-400">registreer</a> om uw meldingen bij te houden.</p>
         </div>
         @endguest
 

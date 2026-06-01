@@ -20,9 +20,11 @@ class NewReportUser extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
+        $name = $notifiable->name ?? 'melder';
+
         return (new MailMessage)
             ->subject('Bedankt voor uw UFO-melding!')
-            ->greeting('Beste ' . $notifiable->name . ',')
+            ->greeting('Beste ' . $name . ',')
             ->line('Wij hebben uw melding succesvol ontvangen.')
             ->line('**Datum waarneming:** ' . $this->report->observed_at->format('d-m-Y H:i'))
             ->line('**Locatie:** ' . $this->report->location)
